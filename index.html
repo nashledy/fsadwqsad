@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Richard Garlík — Život, ve kterém se staví</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1a1815;
+    --charcoal-deep:#100f0d;
+    --ivory:#f5f1e6;
+    --ivory-dim:#eae4d4;
+    --gold:#b08d57;
+    --gold-bright:#cba86a;
+    --olive:#3d4a34;
+    --rust:#8b5e3c;
+    --line:rgba(176,141,87,0.28);
+    --line-soft:rgba(245,241,230,0.12);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --ease: cubic-bezier(.16,.8,.24,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--charcoal);
+    color:var(--ivory);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  ::selection{background:var(--gold);color:var(--charcoal-deep);}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .eyebrow{
+    font-family:var(--sans);
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    font-size:11px;
+    color:var(--gold-bright);
+    font-weight:500;
+  }
+  h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ivory);}
+  .blueprint-bg{
+    position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.05;
+    background-image:
+      linear-gradient(var(--gold) 1px, transparent 1px),
+      linear-gradient(90deg, var(--gold) 1px, transparent 1px);
+    background-size:64px 64px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:28px 0;
+    transition:all 0.5s var(--ease);
+    border-bottom:1px solid transparent;
+  }
+  nav.scrolled{
+    padding:16px 0;
+    background:rgba(16,15,13,0.86);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;}
+  .nav-mark{font-family:var(--serif);font-size:20px;letter-spacing:0.03em;}
+  .nav-mark span{color:var(--gold-bright);}
+  .nav-links{display:flex;gap:40px;list-style:none;}
+  .nav-links a{
+    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--ivory-dim);opacity:0.75;transition:opacity 0.3s var(--ease), color .3s;
+    position:relative;
+  }
+  .nav-links a:hover{opacity:1;color:var(--gold-bright);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+  .hamburger span{width:22px;height:1px;background:var(--ivory);display:block;transition:all .3s var(--ease);}
+  .mobile-menu{
+    position:fixed;inset:0;background:var(--charcoal-deep);z-index:99;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+    opacity:0;pointer-events:none;transition:opacity .4s var(--ease);
+  }
+  .mobile-menu.open{opacity:1;pointer-events:all;}
+  .mobile-menu a{font-family:var(--serif);font-size:28px;color:var(--ivory);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden;padding-top:120px;padding-bottom:60px;
+  }
+  .hero-illustration{
+    position:absolute;top:0;right:-8%;width:62%;height:100%;opacity:0.9;
+    -webkit-mask-image:linear-gradient(to left, black 40%, transparent 95%);
+    mask-image:linear-gradient(to left, black 40%, transparent 95%);
+  }
+  .hero-content{position:relative;z-index:2;}
+  .hero .eyebrow{margin-bottom:26px;display:flex;align-items:center;gap:14px;}
+  .hero .eyebrow::before{content:'';width:36px;height:1px;background:var(--gold);}
+  h1.headline{
+    font-size:clamp(44px, 7.2vw, 96px);
+    line-height:1.02;
+    font-weight:400;
+    max-width:920px;
+    letter-spacing:-0.01em;
+  }
+  h1.headline em{font-style:italic;color:var(--gold-bright);}
+  .hero-sub{
+    margin-top:26px;font-family:var(--serif);font-size:clamp(18px,2vw,24px);
+    color:var(--ivory-dim);font-style:italic;letter-spacing:0.01em;
+  }
+  .hero-support{
+    margin-top:28px;max-width:520px;font-size:15.5px;color:rgba(245,241,230,0.62);
+    font-weight:300;
+  }
+  .scroll-indicator{
+    margin-top:80px;display:flex;align-items:center;gap:14px;
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,241,230,0.45);
+  }
+  .scroll-line{width:1px;height:46px;background:linear-gradient(var(--gold),transparent);position:relative;overflow:hidden;}
+  .scroll-line::after{
+    content:'';position:absolute;top:-20px;left:0;width:100%;height:20px;background:var(--gold-bright);
+    animation:scrollDown 2.2s var(--ease) infinite;
+  }
+  @keyframes scrollDown{0%{top:-20px;}100%{top:46px;}}
+
+  /* ---------- SECTION GENERAL ---------- */
+  section{position:relative;z-index:1;padding:150px 0;}
+  .section-head{max-width:660px;margin-bottom:70px;}
+  .section-head .eyebrow{margin-bottom:18px;}
+  .section-head h2{font-size:clamp(32px,4.2vw,52px);line-height:1.08;}
+  .divider{width:100%;height:1px;background:var(--line-soft);}
+
+  .reveal{opacity:0;transform:translateY(36px);transition:opacity .9s var(--ease), transform .9s var(--ease);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .reveal-delay-1{transition-delay:.1s;}
+  .reveal-delay-2{transition-delay:.22s;}
+  .reveal-delay-3{transition-delay:.34s;}
+
+  /* ---------- INTRO ---------- */
+  .intro-grid{display:grid;grid-template-columns:1.3fr 0.9fr;gap:80px;align-items:start;}
+  .intro-text p{color:rgba(245,241,230,0.72);font-size:16.5px;margin-bottom:20px;max-width:520px;}
+  .intro-text .lede{font-family:var(--serif);font-size:26px;font-style:italic;color:var(--ivory);margin-bottom:26px;max-width:560px;line-height:1.4;}
+  .stat-block{
+    border-left:1px solid var(--line);padding-left:34px;
+    display:flex;flex-direction:column;justify-content:center;height:100%;
+  }
+  .stat-number{
+    font-family:var(--serif);font-size:clamp(72px,9vw,132px);line-height:0.85;color:var(--gold-bright);font-weight:400;
+  }
+  .stat-label{margin-top:14px;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,241,230,0.55);}
+
+  /* ---------- EXPERTISE ---------- */
+  .expertise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);}
+  .expertise-card{
+    background:var(--charcoal);padding:44px 30px;position:relative;transition:background .4s var(--ease);
+    min-height:280px;display:flex;flex-direction:column;
+  }
+  .expertise-card:hover{background:#211f1a;}
+  .expertise-num{font-family:var(--serif);font-size:15px;color:var(--gold);letter-spacing:0.08em;}
+  .expertise-title{font-family:var(--serif);font-size:28px;margin-top:18px;color:var(--ivory);}
+  .expertise-sub{font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-bright);margin-top:8px;}
+  .expertise-desc{margin-top:auto;padding-top:22px;font-size:14px;color:rgba(245,241,230,0.6);line-height:1.65;}
+
+  /* ---------- PORTFOLIO ---------- */
+  .portfolio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;}
+  .p-card{
+    border:1px solid var(--line-soft);padding:38px 34px;cursor:pointer;position:relative;
+    transition:border-color .4s var(--ease), background .4s var(--ease);
+    background:linear-gradient(180deg, rgba(176,141,87,0.02), transparent);
+  }
+  .p-card::before,.p-card::after{
+    content:'';position:absolute;width:16px;height:16px;border:1px solid var(--gold);opacity:0;transition:opacity .4s var(--ease);
+  }
+  .p-card::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+  .p-card::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+  .p-card:hover{border-color:transparent;background:rgba(176,141,87,0.045);}
+  .p-card:hover::before,.p-card:hover::after{opacity:1;}
+  .p-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;}
+  .p-num{font-family:var(--serif);font-size:13px;color:var(--gold);letter-spacing:0.1em;}
+  .p-year{font-size:11px;letter-spacing:0.1em;color:rgba(245,241,230,0.4);border:1px solid var(--line-soft);padding:4px 10px;border-radius:2px;white-space:nowrap;}
+  .p-name{font-family:var(--serif);font-size:30px;margin-top:20px;color:var(--ivory);}
+  .p-formal{font-size:13px;color:rgba(245,241,230,0.42);margin-top:4px;font-style:italic;}
+  .p-tags{margin-top:16px;font-size:11.5px;letter-spacing:0.06em;color:var(--gold-bright);text-transform:uppercase;}
+  .p-desc{margin-top:18px;font-size:14.5px;color:rgba(245,241,230,0.6);line-height:1.7;}
+  .p-open{margin-top:26px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,241,230,0.5);display:flex;align-items:center;gap:10px;}
+  .p-open .ln{width:24px;height:1px;background:var(--gold);transition:width .35s var(--ease);}
+  .p-card:hover .p-open .ln{width:38px;}
+
+  /* modal */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(10,9,8,0.86);backdrop-filter:blur(6px);z-index:200;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+    opacity:0;pointer-events:none;transition:opacity .35s var(--ease);
+  }
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal-box{
+    background:var(--charcoal-deep);border:1px solid var(--line);max-width:640px;width:100%;
+    max-height:84vh;overflow-y:auto;padding:52px 46px;position:relative;
+    transform:translateY(24px);transition:transform .4s var(--ease);
+  }
+  .modal-overlay.open .modal-box{transform:translateY(0);}
+  .modal-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--ivory);font-size:22px;cursor:pointer;opacity:0.6;transition:opacity .3s;line-height:1;}
+  .modal-close:hover{opacity:1;}
+  .modal-eyebrow{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-bright);}
+  .modal-title{font-family:var(--serif);font-size:38px;margin-top:14px;}
+  .modal-formal{font-size:14px;color:rgba(245,241,230,0.45);font-style:italic;margin-top:6px;}
+  .modal-tags{margin-top:18px;font-size:12px;letter-spacing:0.06em;color:var(--gold);text-transform:uppercase;}
+  .modal-divider{height:1px;background:var(--line-soft);margin:26px 0;}
+  .modal-desc{font-size:15.5px;color:rgba(245,241,230,0.72);line-height:1.75;}
+  .modal-role{margin-top:22px;font-size:13.5px;color:var(--ivory-dim);}
+  .modal-role b{color:var(--gold-bright);font-weight:500;}
+  .modal-list{margin-top:24px;list-style:none;}
+  .modal-list li{
+    padding:11px 0;border-top:1px solid var(--line-soft);font-size:14px;color:rgba(245,241,230,0.66);
+    display:flex;gap:12px;
+  }
+  .modal-list li::before{content:'—';color:var(--gold);flex-shrink:0;}
+
+  /* ---------- PERSONAL BUSINESS ---------- */
+  .personal-section{
+    border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+  }
+  .personal-inner{display:grid;grid-template-columns:0.8fr 1.2fr;gap:70px;align-items:center;}
+  .personal-mark{font-family:var(--serif);font-size:15px;color:var(--gold);}
+  .personal-name{font-family:var(--serif);font-size:clamp(30px,4vw,44px);margin-top:16px;}
+  .personal-role{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-bright);margin-top:10px;}
+  .personal-body p{color:rgba(245,241,230,0.68);font-size:15.5px;margin-bottom:18px;max-width:460px;}
+  .personal-tags{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap;}
+  .personal-tag{border:1px solid var(--line);padding:8px 16px;font-size:12px;letter-spacing:0.06em;color:var(--ivory-dim);}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative;margin-top:20px;}
+  .timeline-spine{position:absolute;left:120px;top:0;bottom:0;width:1px;background:var(--line-soft);}
+  .timeline-spine-fill{position:absolute;left:0;top:0;width:100%;background:var(--gold);height:0%;transition:height 1.4s var(--ease);}
+  .t-item{display:grid;grid-template-columns:90px 60px 1fr;gap:0;padding:34px 0;position:relative;}
+  .t-year{font-family:var(--serif);font-size:22px;color:var(--gold-bright);align-self:start;padding-top:2px;}
+  .t-dot-col{display:flex;justify-content:center;position:relative;}
+  .t-dot{width:9px;height:9px;border-radius:50%;background:var(--charcoal);border:1px solid var(--gold);margin-top:9px;z-index:2;transition:background .4s var(--ease);}
+  .t-item.in .t-dot{background:var(--gold-bright);}
+  .t-body h3{font-family:var(--serif);font-size:23px;color:var(--ivory);}
+  .t-body p{margin-top:6px;font-size:14.5px;color:rgba(245,241,230,0.6);max-width:480px;}
+  .t-end{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold-bright);text-align:center;margin-top:20px;padding-left:150px;}
+
+  /* ---------- OVERVIEW ---------- */
+  .overview-list{border-top:1px solid var(--line-soft);}
+  .overview-row{
+    display:grid;grid-template-columns:2fr 2.4fr 1.8fr;gap:24px;padding:26px 0;
+    border-bottom:1px solid var(--line-soft);align-items:center;
+    transition:padding-left .35s var(--ease), background .35s var(--ease);
+  }
+  .overview-row:hover{padding-left:14px;background:rgba(176,141,87,0.035);}
+  .overview-name{font-family:var(--serif);font-size:20px;}
+  .overview-focus{font-size:13.5px;color:rgba(245,241,230,0.58);}
+  .overview-role{font-size:12px;letter-spacing:0.04em;color:var(--gold-bright);text-transform:uppercase;text-align:right;}
+
+  /* ---------- BIGGER PICTURE ---------- */
+  .flow-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin:60px 0;}
+  .flow-step{font-family:var(--serif);font-size:clamp(20px,3vw,30px);color:var(--ivory-dim);letter-spacing:0.02em;padding:10px 0;}
+  .flow-step.active{color:var(--gold-bright);}
+  .flow-arrow{color:var(--gold);font-size:20px;opacity:0.6;}
+  .picture-text{max-width:640px;}
+  .picture-text p{font-size:15.5px;color:rgba(245,241,230,0.65);margin-bottom:14px;}
+  .picture-text .lead{font-family:var(--serif);font-size:22px;font-style:italic;color:var(--ivory);margin-bottom:22px;}
+
+  /* ---------- LEGACY ---------- */
+  .legacy{
+    background:var(--charcoal-deep);text-align:center;padding:190px 0;position:relative;overflow:hidden;
+  }
+  .legacy-quote{
+    font-family:var(--serif);font-style:italic;font-size:clamp(22px,3vw,32px);
+    max-width:760px;margin:0 auto;color:var(--ivory-dim);line-height:1.55;
+  }
+  .legacy-quote .gold{color:var(--gold-bright);not-italic:normal;}
+  .legacy-divider{width:44px;height:1px;background:var(--gold);margin:56px auto;}
+  .legacy-final{font-family:var(--serif);font-size:clamp(38px,6vw,64px);color:var(--ivory);}
+  .legacy-final em{color:var(--gold-bright);font-style:italic;}
+  .legacy-sub{margin-top:24px;font-size:16px;color:rgba(245,241,230,0.55);max-width:520px;margin-left:auto;margin-right:auto;font-weight:300;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:70px 0 46px;text-align:center;}
+  .footer-name{font-family:var(--serif);font-size:26px;}
+  .footer-role{margin-top:8px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-bright);}
+  .footer-meta{margin-top:18px;font-size:12px;color:rgba(245,241,230,0.35);letter-spacing:0.04em;}
+  .footer-line{width:1px;height:40px;background:var(--line);margin:34px auto 0;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .nav-links{display:none;}
+    .hamburger{display:flex;}
+    .wrap{padding:0 22px;}
+    .intro-grid, .personal-inner{grid-template-columns:1fr;gap:44px;}
+    .stat-block{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:26px;}
+    .expertise-grid{grid-template-columns:1fr 1fr;}
+    .portfolio-grid{grid-template-columns:1fr;}
+    .overview-row{grid-template-columns:1fr;gap:6px;text-align:left;}
+    .overview-role{text-align:left;}
+    .timeline-spine{left:14px;}
+    .t-item{grid-template-columns:24px 1fr;gap:16px;}
+    .t-year{grid-column:1/-1;padding-top:0;}
+    .t-dot-col{order:-1;}
+    .t-end{padding-left:0;}
+    .hero-illustration{opacity:0.35;width:100%;right:-20%;}
+    section{padding:100px 0;}
+    .legacy{padding:120px 0;}
+  }
+  @media (max-width:520px){
+    .expertise-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="blueprint-bg"></div>
+
+<nav id="nav">
+  <div class="wrap nav-inner">
+    <div class="nav-mark">Richard <span>Garlík</span></div>
+    <ul class="nav-links">
+      <li><a href="#home">Domů</a></li>
+      <li><a href="#about">O něm</a></li>
+      <li><a href="#expertise">Obory</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#journey">Cesta</a></li>
+      <li><a href="#legacy">Odkaz</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Otevřít menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Domů</a>
+  <a href="#about">O něm</a>
+  <a href="#expertise">Obory</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#journey">Cesta</a>
+  <a href="#legacy">Odkaz</a>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="home">
+  <svg class="hero-illustration" viewBox="0 0 700 800" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#b08d57" stroke-width="1" fill="none" opacity="0.5">
+      <polyline points="80,760 80,320 260,180 440,320 440,760" />
+      <polyline points="80,320 440,320" />
+      <line x1="260" y1="180" x2="260" y2="760" stroke-dasharray="4 6" opacity="0.5"/>
+      <rect x="130" y="440" width="60" height="90" />
+      <rect x="330" y="440" width="60" height="90" />
+      <rect x="130" y="560" width="60" height="90" />
+      <rect x="330" y="560" width="60" height="90" />
+      <circle cx="260" cy="180" r="4" fill="#cba86a" stroke="none"/>
+      <line x1="500" y1="760" x2="500" y2="60" stroke-dasharray="2 6" opacity="0.35"/>
+      <line x1="60" y1="760" x2="620" y2="760" opacity="0.4"/>
+      <path d="M540,760 L540,540 L620,500 L620,760" opacity="0.35"/>
+      <text x="500" y="50" fill="#b08d57" font-family="monospace" font-size="10" opacity="0.6" stroke="none">Z—1993</text>
+    </g>
+  </svg>
+  <div class="wrap hero-content">
+    <div class="eyebrow reveal in">Portfolio jednoho života</div>
+    <h1 class="headline reveal in">Život, ve kterém<br>se <em>staví</em>.</h1>
+    <p class="hero-sub reveal in reveal-delay-1">Richard Garlík · Podnikatel · Investor · Stavitel</p>
+    <p class="hero-support reveal in reveal-delay-2">Více než tři desetiletí Richard Garlík buduje firmy a projekty ve stavebnictví, realitách, investicích a pohostinství.</p>
+    <div class="scroll-indicator reveal in reveal-delay-3">
+      <div class="scroll-line"></div>
+      Scrollovat
+    </div>
+  </div>
+</header>
+
+<!-- INTRO -->
+<section id="about">
+  <div class="wrap">
+    <div class="intro-grid">
+      <div class="intro-text reveal">
+        <div class="eyebrow" style="margin-bottom:20px;">Víc než obchodní portfolio</div>
+        <p class="lede">Profesní cesta Richarda Garlíka trvá přes tři desetiletí a zasahuje do několika propojených odvětví.</p>
+        <p>Od stavebnictví a inženýringu přes investice do nemovitostí a správu majetku až po pohostinství — jeho práce se vždy točila kolem jednoho: stavět věci, které vydrží.</p>
+        <p>Jeho portfolio se v čase proměňovalo — z dlouhodobých investičních a stavebních projektů se vyvinulo v pestrou skupinu firem, nemovitostí a hotelových provozů.</p>
+      </div>
+      <div class="stat-block reveal reveal-delay-2">
+        <div class="stat-number" data-count="30" data-suffix="+">0</div>
+        <div class="stat-label">Let podnikání</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Obory činnosti</div>
+      <h2>Čtyři obory, jedna disciplína</h2>
+    </div>
+    <div class="expertise-grid reveal">
+      <div class="expertise-card">
+        <div class="expertise-num">01</div>
+        <div class="expertise-title">Stavět</div>
+        <div class="expertise-sub">Stavebnictví &amp; inženýring</div>
+        <div class="expertise-desc">Výstavba, rekonstrukce, elektroinstalace, technické poradenství, inženýring, příprava projektů a zhodnocování nemovitostí.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="expertise-num">02</div>
+        <div class="expertise-title">Investovat</div>
+        <div class="expertise-sub">Reality &amp; majetek</div>
+        <div class="expertise-desc">Investice do nemovitostí, development, akvizice, prodej, pronájem a dlouhodobá správa majetku.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="expertise-num">03</div>
+        <div class="expertise-title">Rozvíjet</div>
+        <div class="expertise-sub">Investice &amp; podnikání</div>
+        <div class="expertise-desc">Investice do realitních a developerských projektů, rozvoj podnikání, poradenství, řízení projektů a zakládání nových firem.</div>
+      </div>
+      <div class="expertise-card">
+        <div class="expertise-num">04</div>
+        <div class="expertise-title">Hostit</div>
+        <div class="expertise-sub">Pohostinství &amp; turismus</div>
+        <div class="expertise-desc">Ubytování, pohostinství, volnočasová zařízení a služby cestovního ruchu, se zvláštním zaměřením na oblast Zvíkova.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Obchodní portfolio</div>
+      <h2>Firmy a projekty</h2>
+    </div>
+    <div class="portfolio-grid reveal" id="portfolioGrid"></div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<!-- PERSONAL BUSINESS -->
+<section class="personal-section" id="personal">
+  <div class="wrap">
+    <div class="personal-inner">
+      <div class="reveal">
+        <div class="personal-mark">Kde to začalo</div>
+        <div class="personal-name">Mgr. Richard Garlík</div>
+        <div class="personal-role">Živnostenské podnikání</div>
+      </div>
+      <div class="personal-body reveal reveal-delay-1">
+        <p>Richard podniká jako živnostník od roku 1992.</p>
+        <p>Jeho živnostenské oprávnění zahrnuje elektroinstalace a hostinskou činnost — základ, na kterém později vyrostly firmy tří desetiletí.</p>
+        <div class="personal-tags">
+          <div class="personal-tag">Elektroinstalace</div>
+          <div class="personal-tag">Hostinská činnost</div>
+          <div class="personal-tag">Od roku 1992</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY / TIMELINE -->
+<section id="journey">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Cesta</div>
+      <h2>Tři desetiletí budování</h2>
+    </div>
+    <div class="timeline" id="timeline">
+      <div class="timeline-spine"><div class="timeline-spine-fill" id="spineFill"></div></div>
+      <div id="timelineItems"></div>
+      <p class="t-end reveal">A příběh pokračuje&hellip;</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- OVERVIEW -->
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Přehled portfolia</div>
+      <h2>Na první pohled</h2>
+    </div>
+    <div class="overview-list reveal" id="overviewList"></div>
+  </div>
+</section>
+
+<!-- BIGGER PICTURE -->
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Širší souvislosti</div>
+      <h2>Jedno portfolio. Mnoho kapitol.</h2>
+    </div>
+    <div class="flow-row reveal" id="flowRow">
+      <div class="flow-step" data-step>Stavět</div><div class="flow-arrow">→</div>
+      <div class="flow-step" data-step>Investovat</div><div class="flow-arrow">→</div>
+      <div class="flow-step" data-step>Spravovat</div><div class="flow-arrow">→</div>
+      <div class="flow-step" data-step>Hostit</div><div class="flow-arrow">→</div>
+      <div class="flow-step" data-step>Rozvíjet</div>
+    </div>
+    <div class="picture-text reveal reveal-delay-1">
+      <p class="lead">Richardovo obchodní portfolio spojuje několik oborů, které se přirozeně doplňují.</p>
+      <p>Stavebnictví vytváří základ. Reality vytvářejí dlouhodobou hodnotu. Správa majetku udržuje tyto hodnoty v chodu. Pohostinství mění nemovitosti v zážitky. A investice to celé propojují dohromady.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEGACY -->
+<section class="legacy" id="legacy">
+  <div class="wrap">
+    <p class="legacy-quote reveal">Firma může mít jméno, IČO a rozvahu. Ale za každou firmou je nápad, podstoupené riziko, vyřešený problém, zrekonstruovaná budova, nemovitost vrácená k životu, rozjetý nový projekt — a <span class="gold">nespočet odpracovaných hodin</span>.</p>
+    <p class="legacy-quote reveal reveal-delay-1" style="margin-top:24px;">Za více než tři desetiletí Richard vybudoval víc než portfolio. Vybudoval něco, co dál roste.</p>
+    <div class="legacy-divider reveal reveal-delay-2"></div>
+    <h2 class="legacy-final reveal reveal-delay-2">Všechno nejlepší k 59.<br>narozeninám, <em>tati.</em></h2>
+    <p class="legacy-sub reveal reveal-delay-3">Na vše, co jsi vybudoval — a na vše, co teprve přijde.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-line"></div>
+    <div class="footer-name" style="margin-top:34px;">Richard Garlík</div>
+    <div class="footer-role">Podnikatel · Investor · Stavitel</div>
+    <div class="footer-meta">59 let · 3+ desetiletí budování</div>
+  </div>
+</footer>
+
+<script>
+// ---------- DATA ----------
+const companies = [
+  {
+    num:"01", year:"1993", name:"Santis Invest", formal:"Santis Invest s.r.o.",
+    tags:"Investice do nemovitostí · Development · Stavebnictví · Inženýring",
+    desc:"Jeden z nejdéle fungujících podniků v Richardově portfoliu. Santis Invest se zaměřuje na investice do realitních a developerských projektů a spojuje investiční činnost s praktickou stavební a technickou expertizou. Firma funguje od roku 1993, což z ní dělá jeden z nejdéle běžících podniků v Richardově portfoliu.",
+    role:"Richard je <b>jednatelem</b> Santis Invest od roku 2000 a je <b>50% společníkem</b> spolu se svým bratrem Radimem Garlíkem.",
+    list:["Investice do nemovitostí a developerských projektů","Architektonická řešení a příprava projektů","Realizace a provádění staveb","Prodej, nákup a pronájem nemovitostí","Zateplování a zhodnocování budov","Elektroinstalační práce","Technická projektová dokumentace","Rekonstrukce a regenerace střech","Elektrorevize a kontroly"]
+  },
+  {
+    num:"02", year:"2007", name:"Arabella Services", formal:"Arabella Services, s.r.o.",
+    tags:"Pohostinství · Nemovitosti · Služby · Akce",
+    desc:"Založena v roce 2007, Arabella Services představuje další dlouhodobě fungující část Richardových obchodních aktivit. Firma spojuje pohostinské a realitní činnosti se širšími obchodními a servisními službami.",
+    role:"Richard je <b>50% společník</b> a <b>jednatel</b> spolu se svým bratrem Radimem.",
+    list:["Pohostinské a restaurační služby","Ubytování","Nákup, správa a údržba nemovitostí","Velkoobchod a maloobchod","Marketing a reklama","Kulturní a společenské akce","Pronájem nemovitostí"]
+  },
+  {
+    num:"03", year:"2018", name:"Stavby a rekonstrukce", formal:"Stavby a rekonstrukce, s.r.o.",
+    tags:"Stavebnictví · Elektrotechnika · Technické služby",
+    desc:"Firma má široké technické a stavební zaměření, které pokrývá jak stavební projekty, tak specializované elektrikářské práce.",
+    role:"Richard je <b>jednatelem</b> a <b>jediným společníkem</b> firmy od roku 2018.",
+    list:["Výstavba rezidenčních a komerčních budov","Rekonstrukce a modernizace budov","Demolice a příprava staveniště","Elektroinstalace","Montáž, opravy a revize elektrických zařízení","Instalace průmyslových zařízení","Inženýring a technické poradenství","Technické zkoušky, měření a analýzy","Realitní služby","Správa a údržba nemovitostí","Ubytovací služby","Technické studie a poradenství","Výzkum a vývoj","Projektová a technická dokumentace"]
+  },
+  {
+    num:"04", year:"2019", name:"DOTMARK", formal:"DOTMARK s.r.o.",
+    tags:"Reality · Správa nemovitostí · Poradenství",
+    desc:"Firma se primárně zaměřuje na realitní a obchodní služby.",
+    role:"Richard je <b>jednatelem</b> a <b>50% společníkem</b> DOTMARK od roku 2019, spolu se svým bratrem Radimem.",
+    list:["Pronájem a správa nemovitostí","Realitní zprostředkování","Správa majetku","Obchodní a manažerské poradenství","Architektonické a inženýrské poradenství","Velkoobchod a maloobchod","Ubytování","Administrativní služby","Úklidové a realitní služby"]
+  },
+  {
+    num:"05", year:"2020", name:"Residence Chuchle", formal:"Residence Chuchle s.r.o.",
+    tags:"Rezidenční nemovitosti · Reality",
+    desc:"Založena v roce 2020, Residence Chuchle se zaměřuje na vlastnictví a správu nemovitostí.",
+    role:"Richard je <b>jednatelem</b> od založení firmy a od roku 2021 je jejím <b>jediným společníkem</b>.",
+    list:["Rezidenční nemovitosti","Vlastnictví nemovitostí","Pronájem nemovitostí","Správa nemovitostí","Dlouhodobé investice do nemovitostí"]
+  },
+  {
+    num:"06", year:"2020", name:"Santis Property", formal:"Santis Property s.r.o.",
+    tags:"Investice do nemovitostí · Pronájem · Správa",
+    desc:"Založena v roce 2020 v rámci restrukturalizace skupiny Santis, Santis Property se zaměřuje na vlastnictví, pronájem a správu nemovitostí.",
+    role:"Richard působí jako <b>jednatel</b> spolu se svým bratrem Radimem.",
+    list:["Vlastnictví nemovitostí","Investice do nemovitostí","Pronájem rezidenčních a komerčních prostor","Správa nemovitostí","Dlouhodobý rozvoj nemovitostí"]
+  },
+  {
+    num:"07", year:"2022", name:"Resort Zvíkov", formal:"Resort Zvíkov s.r.o.",
+    tags:"Pohostinství · Ubytování · Volný čas · Turismus",
+    desc:"Založen v roce 2022, Resort Zvíkov představuje Richardův vstup do pohostinství a volnočasového podnikání. Činnosti firmy zahrnují ubytování, restaurační služby, správu nemovitostí a širokou škálu volnočasových a turistických služeb.",
+    role:"Richard je <b>jednatelem</b> a <b>100% společníkem</b> firmy.",
+    list:["Ubytování","Restaurační a pohostinské služby","Správa nemovitostí","Sportovní a volnočasová zařízení","Kulturní a společenské akce","Služby cestovního ruchu","Akce a aktivity","Pronájem vybavení","Technické a podpůrné služby"]
+  },
+  {
+    num:"08", year:"2024", name:"Ubytování Zvíkov", formal:"Ubytování Zvíkov s.r.o.",
+    tags:"Ubytování · Turismus · Volný čas",
+    desc:"Založena v roce 2024, Ubytování Zvíkov se zaměřuje konkrétně na ubytovací a turistické služby v oblasti Zvíkova. Firma provozuje ubytovací zařízení v Čimelicích, přičemž její registrované činnosti zahrnují také turismus, realitní služby a volnočasové aktivity.",
+    role:"Richard je <b>jednatelem</b> firmy.",
+    list:["Ubytování","Turistické a cestovní služby","Správa nemovitostí","Sportovní a volnočasové aktivity","Kulturní a společenské akce","Technické služby","Služby pro hosty a domácnost","Maloobchodní a komerční služby"]
+  }
+];
+
+const timelineData = [
+  {year:"1992", title:"Začátek", text:"Richard zahajuje svou cestu jako nezávislý živnostník."},
+  {year:"1993", title:"Santis Invest", text:"Firma, která se později stane jednou z nejdéle fungujících součástí portfolia, zahajuje činnost."},
+  {year:"2000", title:"Santis Invest", text:"Richard se stává jednatelem a společníkem."},
+  {year:"2007", title:"Arabella Services", text:"Nová kapitola spojující pohostinství, nemovitosti a služby."},
+  {year:"2018", title:"Stavby a rekonstrukce", text:"Stavebnictví, inženýring a technické služby se stávají klíčovou součástí portfolia."},
+  {year:"2019", title:"DOTMARK", text:"Rozšíření do správy nemovitostí a realit."},
+  {year:"2020", title:"Residence Chuchle", text:"Rezidenční nemovitosti a investice do majetku."},
+  {year:"2020", title:"Santis Property", text:"Rozšíření portfolia Santis o samostatnou správu a vlastnictví nemovitostí."},
+  {year:"2022", title:"Resort Zvíkov", text:"Vstup hlouběji do pohostinství, turismu a volného času."},
+  {year:"2024", title:"Ubytování Zvíkov", text:"Nejnovější kapitola portfolia, zaměřená na ubytování a turismus."}
+];
+
+// ---------- RENDER PORTFOLIO ----------
+const grid = document.getElementById('portfolioGrid');
+companies.forEach((c,i)=>{
+  const card = document.createElement('div');
+  card.className = 'p-card';
+  card.innerHTML = `
+    <div class="p-top"><div class="p-num">${c.num}</div><div class="p-year">${c.year}</div></div>
+    <div class="p-name">${c.name}</div>
+    <div class="p-formal">${c.formal}</div>
+    <div class="p-tags">${c.tags}</div>
+    <div class="p-desc">${c.desc.split('. ')[0]}.</div>
+    <div class="p-open"><div class="ln"></div>Zobrazit detail</div>
+  `;
+  card.addEventListener('click', ()=>openModal(c));
+  grid.appendChild(card);
+});
+
+function openModal(c){
+  document.getElementById('modalBox').innerHTML = `
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-eyebrow">${c.num} — Založeno ${c.year}</div>
+    <div class="modal-title">${c.name}</div>
+    <div class="modal-formal">${c.formal}</div>
+    <div class="modal-tags">${c.tags}</div>
+    <div class="modal-divider"></div>
+    <div class="modal-desc">${c.desc}</div>
+    <div class="modal-role">${c.role}</div>
+    <ul class="modal-list">${c.list.map(l=>`<li>${l}</li>`).join('')}</ul>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('modalOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='modalOverlay') closeModal();
+});
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+
+// ---------- RENDER TIMELINE ----------
+const tWrap = document.getElementById('timelineItems');
+timelineData.forEach(t=>{
+  const item = document.createElement('div');
+  item.className = 't-item reveal';
+  item.innerHTML = `
+    <div class="t-year">${t.year}</div>
+    <div class="t-dot-col"><div class="t-dot"></div></div>
+    <div class="t-body"><h3>${t.title}</h3><p>${t.text}</p></div>
+  `;
+  tWrap.appendChild(item);
+});
+
+// ---------- RENDER OVERVIEW ----------
+const overview = document.getElementById('overviewList');
+companies.forEach(c=>{
+  const row = document.createElement('div');
+  row.className = 'overview-row';
+  row.innerHTML = `
+    <div class="overview-name">${c.formal}</div>
+    <div class="overview-focus">${c.tags}</div>
+    <div class="overview-role">${c.role.replace(/<[^>]+>/g,'').split('.')[0]}</div>
+  `;
+  overview.appendChild(row);
+});
+
+// ---------- NAV SCROLL ----------
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', ()=>{
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ---------- MOBILE MENU ----------
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
+
+// ---------- REVEAL ON SCROLL ----------
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+},{threshold:0.15});
+revealEls.forEach(el=> io.observe(el));
+
+// ---------- COUNTER ----------
+const statEl = document.querySelector('.stat-number');
+const counterIO = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const target = parseInt(statEl.dataset.count,10);
+      const suffix = statEl.dataset.suffix || '';
+      let cur = 0;
+      const step = Math.max(1, Math.round(target/40));
+      const timer = setInterval(()=>{
+        cur += step;
+        if(cur >= target){ cur = target; clearInterval(timer); }
+        statEl.textContent = cur + suffix;
+      }, 30);
+      counterIO.unobserve(statEl);
+    }
+  });
+},{threshold:0.4});
+if(statEl) counterIO.observe(statEl);
+
+// ---------- TIMELINE SPINE FILL ----------
+const timelineSection = document.getElementById('timeline');
+const spineFill = document.getElementById('spineFill');
+window.addEventListener('scroll', updateSpine);
+function updateSpine(){
+  const rect = timelineSection.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const total = rect.height;
+  const progressed = Math.min(Math.max(vh*0.6 - rect.top, 0), total);
+  const pct = total>0 ? (progressed/total)*100 : 0;
+  spineFill.style.height = pct + '%';
+}
+updateSpine();
+
+// ---------- FLOW STEPS ----------
+const flowRow = document.getElementById('flowRow');
+const flowSteps = flowRow.querySelectorAll('[data-step]');
+const flowIO = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      flowSteps.forEach((s,i)=> setTimeout(()=> s.classList.add('active'), i*220));
+      flowIO.unobserve(flowRow);
+    }
+  });
+},{threshold:0.5});
+flowIO.observe(flowRow);
+</script>
+</body>
+</html>
